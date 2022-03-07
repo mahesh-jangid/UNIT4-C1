@@ -30,6 +30,7 @@ function checkPermission(role) {
 }
 
 function logger(req, res, next) {
+  console.log(req.path);
   next();
 }
 
