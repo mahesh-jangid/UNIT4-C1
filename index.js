@@ -2,35 +2,34 @@ const express = require("express");
 const app = express();
 
 app.get("/book", logger, (req, res) => {
-  return res.json({ route: "/books" });
+  return res.json({ route: "/book" });
 });
 
-app.get("/libraries", logger, checkPermission("libraries"), (req, res) => {
-  return res.json({ route: "/libraries", permission: true });
+app.get("/libraries", logger, checkPermission("librarian"), (req, res) => {
+  if (req.permission === true) {
+    return res.json({ route: "/libraries", permission: true });
+  }
 });
 
-app.get("/authors ", logger, checkPermission("authors"), (req, res) => {
-  return res.json({ route: "/authors", permission: true });
+app.get("/authors", logger, checkPermission("author"), (req, res) => {
+  if (req.permission === true) {
+    return res.json({ route: "/authors", permission: true });
+  }
 });
 
 function checkPermission(role) {
-  return function logger1(req, res, next) {
-    if (role === "libraries") {
-      return next();
-    } else {
-      return next();
+  return function logger2(req, res, next) {
+    if (role === "librarian") {
+      req.permission = true;
+      next();
+    } else if (role === "author") {
+      req.permission = true;
+      next();
     }
   };
 }
 
 function logger(req, res, next) {
-  if (req.path === "/libraries") {
-    req.role = "libraries";
-  } else if (req.path === "/authors") {
-    req.role = "authors";
-  } else if (req.path === "/book") {
-    req.role = "book";
-  }
   next();
 }
 
