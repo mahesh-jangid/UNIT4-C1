@@ -12,7 +12,7 @@ app.get("/libraries", logger, checkPermission("libraries"), (req, res) => {
 app.get("/authors ", logger, checkPermission("authors"), (req, res) => {
   return res.json({ route: "/authors", permission: true });
 });
-app.use(logger);
+
 function checkPermission(role) {
   return function logger1(req, res, next) {
     if (role === "libraries") {
